@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Description de ma page">
+    <title>Titre de ma page</title>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <label for="serialnumber">serial number : </label>
+            <input type="text" id="serialNumber" name="serialnumber" onkeyup="verifCondition1()">
+            <button id="btnValid" onclick="verifNumValid();" disabled>click</button>
+        </div>
+    </section>
+    <script>
+        function verifNumValid() {
+            let num = prompt("numero de serie :");
+            if (verifCondition1(num)) {
+                if (verifCondition2(num)) {
+                    if (verifCondition3(num)) {
+                        if (verifCondition4(num)) {
+                            alert("numero de série validé")
+                        }
+                    }
+                }
+            }
+        }
+
+        function verifCondition1() {
+            const num = document.getElementById("serialNumber");
+            const myBtn = document.getElementById("btnValid");
+            if (num.value.length == 19 && num.value[4] == "-" && num.value[9] == "-" && num.value[14] == "-") {
+                myBtn.disabled = false;
+            }
+            else {
+                myBtn.disabled = true;
+                if (num.value.length == 4 || num.value.length == 9 || num.value.length == 14) {
+                    num.value=num.value+"-";
+                // for (i=0; i<num.length; i++) {
+                //     if (i==4 || i==9 || i==14) {
+                //         if (num[i] != "-") {
+                //             console.log("etape1 non validée")
+                //             alert("mauvais num de série");
+                //             return false;
+                //         }    
+                    // }
+                    // else if (isNaN(num[i])) {
+                    //     console.log("etape1 non validée")
+                    //     alert("mauvais num de série");
+                    //     return false;
+                    // }
+                }
+            }
+            // console.log("etape1 validée")
+            // return true;
+
+        }
+
+        function verifCondition2(num) {
+            for (i=0; i<4; i++) {
+                if (num[i] != num[13-i]) {
+                    console.log("etape2 non validée")
+                    alert('mauvais num de série');
+                    return false;
+                }
+            }
+            console.log("etape2 validée")
+            return true;
+        }
+
+        function verifCondition3(num) {
+            let g3 = parseFloat(num[10] + num[11] + num[12] + num[13]);
+            let g37 = g3*7;
+            let st37 = String(g37);
+            for (i=0; i<4; i++) {
+                if (num[8-i] != st37[st37.length - 1 - i]) {
+                    console.log("etape3 non validée")
+                    alert('mauvais num de série');
+                    return false;
+                }
+            }
+            console.log("etape3 validée")
+            return true;
+        }
+
+        function verifCondition4(num) {
+            let g1 = parseFloat(num[0] + num[1] + num[2] + num[3]);
+            let g2 = parseFloat(num[5] + num[6] + num[7] + num[8]);
+            let g3 = parseFloat(num[10] + num[11] + num[12] + num[13]);
+            let g4 = parseFloat(num[15] + num[16] + num[17] + num[18]);
+            let gresult = (g1 + g2 + g3 + g4) / 10000;
+            if (!Number.isInteger(gresult)) {
+                console.log("etape4 non validée")
+                alert("mauvais num de série");
+                return false;
+            }
+            console.log("etape4 validée")
+            return true;
+        }
+    </script>     
+</body>
+</html>
